@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import StatCard from '../components/dashboard/StatCard';
 import PortfolioChart from '../components/dashboard/PortfolioChart';
 import RecentTrades from '../components/dashboard/RecentTrades';
 import ActiveBots from '../components/dashboard/ActiveBots';
-import { Wallet, Bot, ArrowRightLeft, TrendingUp } from 'lucide-react';
+import { Wallet, Bot, ArrowRightLeft, TrendingUp, Zap, RefreshCw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function Dashboard() {
   const { data: holdings = [] } = useQuery({
