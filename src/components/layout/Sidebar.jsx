@@ -7,11 +7,8 @@ import {
   Wallet, 
   History, 
   Settings,
-  TrendingUp,
-  Menu,
-  X
+  TrendingUp
 } from 'lucide-react';
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const navItems = [
