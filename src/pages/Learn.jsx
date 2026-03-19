@@ -2,12 +2,19 @@ import React, { useState } from 'react';
 import { cn } from "@/lib/utils";
 import { BookOpen, TrendingUp, Shield, Bot, BarChart2, ChevronDown, ChevronUp, Lightbulb, AlertTriangle } from 'lucide-react';
 
+const CHART_IMAGES = {
+  candlestickAnatomy: 'https://media.base44.com/images/public/69bc59372fd933208db74d78/a0bf8de3c_generated_image.png',
+  uptrend: 'https://media.base44.com/images/public/69bc59372fd933208db74d78/99d893b37_generated_image.png',
+  patterns: 'https://media.base44.com/images/public/69bc59372fd933208db74d78/f032608b0_generated_image.png',
+};
+
 const sections = [
   {
     id: 'basics',
     icon: BookOpen,
     color: 'text-blue-400',
     bg: 'bg-blue-400/10',
+    thumbnail: 'https://media.base44.com/images/public/69bc59372fd933208db74d78/a3a148491_generated_image.png',
     title: 'The Basics',
     subtitle: 'What are stocks & crypto?',
     lessons: [
