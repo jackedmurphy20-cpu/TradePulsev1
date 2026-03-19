@@ -11,6 +11,7 @@ import LiveTradeMonitor from '../components/bots/LiveTradeMonitor';
 export default function Bots() {
   const [showCreate, setShowCreate] = useState(false);
   const [filter, setFilter] = useState('all');
+  const [showMonitor, setShowMonitor] = useState(false);
 
   const { data: bots = [] } = useQuery({
     queryKey: ['trading-bots'],
