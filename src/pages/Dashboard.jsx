@@ -49,7 +49,7 @@ export default function Dashboard() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <div className="flex items-center justify-between">
+        <div className="flex items-start sm:items-center justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold text-foreground tracking-tight">Dashboard</h1>
             <p className="text-sm text-muted-foreground mt-1">Monitor your automated trading portfolio</p>
