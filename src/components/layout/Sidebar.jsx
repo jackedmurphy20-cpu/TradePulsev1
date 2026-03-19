@@ -8,7 +8,8 @@ import {
   History, 
   Settings,
   TrendingUp,
-  FlaskConical
+  FlaskConical,
+  BookOpen
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
