@@ -49,8 +49,16 @@ export default function Dashboard() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground tracking-tight">Dashboard</h1>
-        <p className="text-sm text-muted-foreground mt-1">Monitor your automated trading portfolio</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">Dashboard</h1>
+            <p className="text-sm text-muted-foreground mt-1">Monitor your automated trading portfolio</p>
+          </div>
+          <Button onClick={handleRunNow} disabled={running} className="gap-2">
+            {running ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
+            {running ? 'Running...' : 'Run Now'}
+          </Button>
+        </div>
       </div>
 
       {/* Stats */}
