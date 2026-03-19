@@ -123,10 +123,20 @@ Deno.serve(async (req) => {
     const apiKey = Deno.env.get('ALPACA_API_KEY');
     const apiSecret = Deno.env.get('ALPACA_API_SECRET');
 
-    const candles = await fetchCandles(symbol, assetType || 'stock', timeframe || '1d', startDate, endDate, apiKey, apiSecret);
+    let tf = timeframe || '1d';
 
-    if (candles.length < 30) {
-      return Response.json({ error: 'Not enough historical data for this range. Try a wider date range.' }, { status: 400 });
+    // For very short ranges, auto-downgrade to a smaller timeframe to get enough candles
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const daysDiff = (end - start) / (1000 * 60 * 60 * 24);
+
+    if (daysDiff <= 1 && tf === '1d') tf = '15m';
+    else if (daysDiff <= 5 && tf === '1d') tf = '1h';
+
+    const candles = await fetchCandles(symbol, assetType || 'stock', tf, startDate, endDate, apiKey, apiSecret);
+
+    if (candles.length < 5) {
+      return Response.json({ error: 'Not enough historical data for this range. Try a wider date range or a smaller timeframe.' }, { status: 400 });
     }
 
     const closes = candles.map(c => c.c);
