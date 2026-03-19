@@ -68,6 +68,7 @@ Switch to live mode in Settings only when you're confident in your strategy's pe
     icon: TrendingUp,
     color: 'text-emerald-400',
     bg: 'bg-emerald-400/10',
+    thumbnail: 'https://media.base44.com/images/public/69bc59372fd933208db74d78/e805c962f_generated_image.png',
     title: 'Trading Strategies',
     subtitle: 'How the bots actually trade',
     lessons: [
