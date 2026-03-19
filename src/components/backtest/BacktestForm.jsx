@@ -80,9 +80,28 @@ export default function BacktestForm({ form, onChange, onRun, loading }) {
           <Input type="number" value={form.budget} onChange={e => onChange('budget', Number(e.target.value))} />
         </div>
 
-        <div className="space-y-1.5">
-          <Label>Stop Loss %</Label>
-          <Input type="number" placeholder="e.g. 5" value={form.stopLossPct} onChange={e => onChange('stopLossPct', Number(e.target.value))} />
+        <div className="space-y-1.5 sm:col-span-2">
+          <div className="flex items-center justify-between">
+            <Label>Stop Loss</Label>
+            <div className="flex items-center gap-1 bg-secondary rounded-md p-0.5 text-xs">
+              <button
+                type="button"
+                onClick={() => onChange('stopLossType', 'pct')}
+                className={`px-2.5 py-1 rounded transition-colors font-medium ${form.stopLossType === 'pct' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              >%</button>
+              <button
+                type="button"
+                onClick={() => onChange('stopLossType', 'usd')}
+                className={`px-2.5 py-1 rounded transition-colors font-medium ${form.stopLossType === 'usd' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              >$</button>
+            </div>
+          </div>
+          <Input
+            type="number"
+            placeholder={form.stopLossType === 'pct' ? 'e.g. 5 (%)' : 'e.g. 500 ($)'}
+            value={form.stopLossValue}
+            onChange={e => onChange('stopLossValue', e.target.value)}
+          />
         </div>
 
         <div className="space-y-1.5">
