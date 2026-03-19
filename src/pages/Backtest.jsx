@@ -91,7 +91,7 @@ export default function Backtest() {
             <>
               <BacktestSummary summary={result.summary} />
               <BacktestChart equityCurve={result.equityCurve} initialBudget={result.summary.initialBudget} />
-              <BacktestTradeLog trades={result.trades} />
+              <BacktestTradeLog trades={result.trades} equityCurve={result.equityCurve} />
             </>
           )}
         </div>
