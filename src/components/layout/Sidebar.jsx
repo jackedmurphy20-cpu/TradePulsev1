@@ -19,6 +19,7 @@ const navItems = [
   { path: '/portfolio', label: 'Portfolio', icon: Wallet },
   { path: '/trades', label: 'Trade History', icon: History },
   { path: '/backtest', label: 'Backtester', icon: FlaskConical },
+  { path: '/learn', label: 'Learn', icon: BookOpen },
   { path: '/settings', label: 'Settings', icon: Settings },
 ];
 
