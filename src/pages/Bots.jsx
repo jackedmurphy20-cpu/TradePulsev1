@@ -28,9 +28,14 @@ export default function Bots() {
           <h1 className="text-2xl font-bold text-foreground tracking-tight">Trading Bots</h1>
           <p className="text-sm text-muted-foreground mt-1">Automate your trading with custom strategies</p>
         </div>
-        <Button onClick={() => setShowCreate(true)} className="bg-primary gap-2">
-          <Plus className="w-4 h-4" /> New Bot
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={() => setShowMonitor(v => !v)} variant="outline" className="gap-2">
+            <Radio className="w-4 h-4 text-accent" /> {showMonitor ? 'Hide Monitor' : 'Live Monitor'}
+          </Button>
+          <Button onClick={() => setShowCreate(true)} className="bg-primary gap-2">
+            <Plus className="w-4 h-4" /> New Bot
+          </Button>
+        </div>
       </div>
 
       <Tabs value={filter} onValueChange={setFilter}>
