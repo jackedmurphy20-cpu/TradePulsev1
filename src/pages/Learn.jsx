@@ -202,6 +202,7 @@ About **95% of price action** happens inside the bands. When price breaks outsid
     icon: Shield,
     color: 'text-red-400',
     bg: 'bg-red-400/10',
+    thumbnail: 'https://media.base44.com/images/public/69bc59372fd933208db74d78/c2c36d81d_generated_image.png',
     title: 'Risk Management',
     subtitle: 'How to not blow up your account',
     lessons: [
