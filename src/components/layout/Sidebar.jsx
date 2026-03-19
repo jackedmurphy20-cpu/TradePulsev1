@@ -7,7 +7,8 @@ import {
   Wallet, 
   History, 
   Settings,
-  TrendingUp
+  TrendingUp,
+  FlaskConical
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
 

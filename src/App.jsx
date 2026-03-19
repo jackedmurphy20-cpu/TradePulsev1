@@ -13,6 +13,7 @@ import Bots from './pages/Bots';
 import Portfolio from './pages/Portfolio';
 import Trades from './pages/Trades';
 import Settings from './pages/Settings';
+import Backtest from './pages/Backtest';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
