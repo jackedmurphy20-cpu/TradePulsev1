@@ -132,6 +132,7 @@ TradePulse's grid bot uses Bollinger Bands to define the grid range, then buys w
     icon: BarChart2,
     color: 'text-purple-400',
     bg: 'bg-purple-400/10',
+    thumbnail: 'https://media.base44.com/images/public/69bc59372fd933208db74d78/c7ff208e1_generated_image.png',
     title: 'Reading Indicators',
     subtitle: 'RSI, MACD, Bollinger Bands explained simply',
     lessons: [
