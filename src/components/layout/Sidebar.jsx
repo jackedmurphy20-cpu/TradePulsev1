@@ -23,24 +23,12 @@ const navItems = [
   { path: '/settings', label: 'Settings', icon: Settings },
 ];
 
-export default function Sidebar({ isOpen, setIsOpen }) {
+export default function Sidebar() {
   const location = useLocation();
 
   return (
     <>
-      {/* Mobile overlay */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-      
-      <aside className={cn(
-        "fixed top-0 left-0 z-50 h-full w-64 bg-sidebar border-r border-sidebar-border flex flex-col transition-transform duration-300",
-        "lg:translate-x-0",
-        isOpen ? "translate-x-0" : "-translate-x-full"
-      )}>
+      <aside className="hidden lg:flex fixed top-0 left-0 z-50 h-full w-64 bg-sidebar border-r border-sidebar-border flex-col">
         {/* Logo */}
         <div className="p-6 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3" onClick={() => setIsOpen(false)}>
