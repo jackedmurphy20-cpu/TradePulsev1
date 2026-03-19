@@ -18,6 +18,7 @@ const navItems = [
   { path: '/bots', label: 'Trading Bots', icon: Bot },
   { path: '/portfolio', label: 'Portfolio', icon: Wallet },
   { path: '/trades', label: 'Trade History', icon: History },
+  { path: '/backtest', label: 'Backtester', icon: FlaskConical },
   { path: '/settings', label: 'Settings', icon: Settings },
 ];
 
