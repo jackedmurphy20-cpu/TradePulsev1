@@ -1,78 +1,89 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.21';
 
-// --- Technical Indicators ---
-function calcRSI(closes, period = 14) {
-  if (closes.length < period + 1) return 50;
-  let gains = 0, losses = 0;
-  for (let i = closes.length - period; i < closes.length; i++) {
-    const diff = closes[i] - closes[i - 1];
-    if (diff > 0) gains += diff; else losses -= diff;
+// --- Technical Indicators (vectorized, computed once over full array) ---
+function calcRSIArray(closes, period = 14) {
+  const result = new Array(closes.length).fill(50);
+  for (let i = period; i < closes.length; i++) {
+    let gains = 0, losses = 0;
+    for (let j = i - period + 1; j <= i; j++) {
+      const diff = closes[j] - closes[j - 1];
+      if (diff > 0) gains += diff; else losses -= diff;
+    }
+    const avgGain = gains / period;
+    const avgLoss = losses / period;
+    result[i] = avgLoss === 0 ? 100 : 100 - 100 / (1 + avgGain / avgLoss);
   }
-  const avgGain = gains / period;
-  const avgLoss = losses / period;
-  if (avgLoss === 0) return 100;
-  const rs = avgGain / avgLoss;
-  return 100 - 100 / (1 + rs);
+  return result;
 }
 
-function calcEMA(closes, period) {
+function calcEMAArray(closes, period) {
   const k = 2 / (period + 1);
-  let ema = closes[0];
-  for (let i = 1; i < closes.length; i++) ema = closes[i] * k + ema * (1 - k);
-  return ema;
+  const result = new Array(closes.length).fill(closes[0]);
+  for (let i = 1; i < closes.length; i++) {
+    result[i] = closes[i] * k + result[i - 1] * (1 - k);
+  }
+  return result;
 }
 
-function calcSMA(closes, period) {
-  const slice = closes.slice(-period);
-  return slice.reduce((a, b) => a + b, 0) / slice.length;
+function calcSMAArray(closes, period) {
+  const result = new Array(closes.length).fill(null);
+  for (let i = period - 1; i < closes.length; i++) {
+    let sum = 0;
+    for (let j = i - period + 1; j <= i; j++) sum += closes[j];
+    result[i] = sum / period;
+  }
+  return result;
 }
 
-function calcBollinger(closes, period = 20) {
-  const sma = calcSMA(closes, period);
-  const slice = closes.slice(-period);
-  const variance = slice.reduce((sum, v) => sum + Math.pow(v - sma, 2), 0) / period;
-  const std = Math.sqrt(variance);
-  return { upper: sma + 2 * std, middle: sma, lower: sma - 2 * std };
+function calcBollingerArrays(closes, period = 20) {
+  const upper = new Array(closes.length).fill(null);
+  const lower = new Array(closes.length).fill(null);
+  const middle = calcSMAArray(closes, period);
+  for (let i = period - 1; i < closes.length; i++) {
+    const slice = closes.slice(i - period + 1, i + 1);
+    const sma = middle[i];
+    const variance = slice.reduce((s, v) => s + Math.pow(v - sma, 2), 0) / period;
+    const std = Math.sqrt(variance);
+    upper[i] = sma + 2 * std;
+    lower[i] = sma - 2 * std;
+  }
+  return { upper, lower, middle };
 }
 
-// --- Signal generators per strategy ---
-function getSignal(strategy, closes, i) {
-  const window = closes.slice(0, i + 1);
-  if (window.length < 5) return 'hold';
+// Pre-compute all signals up front
+function computeSignals(strategy, closes) {
+  const n = closes.length;
+  const signals = new Array(n).fill('hold');
 
   if (strategy === 'momentum') {
-    const rsi = calcRSI(window);
-    const ema12 = calcEMA(window, 12);
-    const ema26 = calcEMA(window, 26);
-    if (rsi < 35 && ema12 > ema26) return 'buy';
-    if (rsi > 65 && ema12 < ema26) return 'sell';
-    return 'hold';
+    const rsi = calcRSIArray(closes, 14);
+    const ema12 = calcEMAArray(closes, 12);
+    const ema26 = calcEMAArray(closes, 26);
+    for (let i = 26; i < n; i++) {
+      if (rsi[i] < 35 && ema12[i] > ema26[i]) signals[i] = 'buy';
+      else if (rsi[i] > 65 && ema12[i] < ema26[i]) signals[i] = 'sell';
+    }
+  } else if (strategy === 'mean_reversion') {
+    const { upper, lower } = calcBollingerArrays(closes, 20);
+    for (let i = 20; i < n; i++) {
+      if (upper[i] && closes[i] < lower[i]) signals[i] = 'buy';
+      else if (upper[i] && closes[i] > upper[i]) signals[i] = 'sell';
+    }
+  } else if (strategy === 'dca') {
+    for (let i = 0; i < n; i++) {
+      if (i % 5 === 0) signals[i] = 'buy';
+    }
+  } else if (strategy === 'grid') {
+    const sma = calcSMAArray(closes, Math.min(20, n));
+    for (let i = 0; i < n; i++) {
+      if (!sma[i]) continue;
+      const pct = (closes[i] - sma[i]) / sma[i];
+      if (pct < -0.02) signals[i] = 'buy';
+      else if (pct > 0.02) signals[i] = 'sell';
+    }
   }
 
-  if (strategy === 'mean_reversion') {
-    const bb = calcBollinger(window);
-    const price = window[window.length - 1];
-    if (price < bb.lower) return 'buy';
-    if (price > bb.upper) return 'sell';
-    return 'hold';
-  }
-
-  if (strategy === 'dca') {
-    // Buy every N candles regardless
-    if (i % 5 === 0) return 'buy';
-    return 'hold';
-  }
-
-  if (strategy === 'grid') {
-    const sma = calcSMA(window, 20);
-    const price = window[window.length - 1];
-    const pct = (price - sma) / sma;
-    if (pct < -0.02) return 'buy';
-    if (pct > 0.02) return 'sell';
-    return 'hold';
-  }
-
-  return 'hold';
+  return signals;
 }
 
 // --- Fetch candles from Alpaca ---
@@ -123,13 +134,9 @@ Deno.serve(async (req) => {
     const apiKey = Deno.env.get('ALPACA_API_KEY');
     const apiSecret = Deno.env.get('ALPACA_API_SECRET');
 
+    // Auto-downgrade timeframe for short date ranges
     let tf = timeframe || '1d';
-
-    // For very short ranges, auto-downgrade to a smaller timeframe to get enough candles
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const daysDiff = (end - start) / (1000 * 60 * 60 * 24);
-
+    const daysDiff = (new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24);
     if (daysDiff <= 1 && tf === '1d') tf = '15m';
     else if (daysDiff <= 5 && tf === '1d') tf = '1h';
 
@@ -141,10 +148,12 @@ Deno.serve(async (req) => {
 
     const closes = candles.map(c => c.c);
     const initialBudget = budget || 10000;
-    // stopLoss stored as a fraction for % mode, or raw $ amount for usd mode
     const stopLossMode = stopLossType || 'pct';
     const stopLossThreshold = stopLossValue ? (stopLossMode === 'pct' ? stopLossValue / 100 : stopLossValue) : null;
     const takeProfit = takeProfitPct ? takeProfitPct / 100 : null;
+
+    // Pre-compute all signals at once (efficient)
+    const signals = computeSignals(strategy, closes);
 
     let cash = initialBudget;
     let shares = 0;
@@ -155,9 +164,9 @@ Deno.serve(async (req) => {
 
     for (let i = 0; i < candles.length; i++) {
       const price = closes[i];
-      const signal = getSignal(strategy, closes, i);
+      const signal = signals[i];
 
-      // Check stop-loss / take-profit on open position
+      // Check stop-loss / take-profit
       if (shares > 0 && entryPrice) {
         const pct = (price - entryPrice) / entryPrice;
         const slTriggered = stopLossThreshold && (
@@ -178,7 +187,6 @@ Deno.serve(async (req) => {
         }
       }
 
-      // Strategy signal
       if (signal === 'buy' && cash > price) {
         const qty = Math.floor((cash * 0.95) / price);
         if (qty > 0) {
@@ -204,7 +212,7 @@ Deno.serve(async (req) => {
       const proceeds = shares * finalPrice;
       const pl = proceeds - shares * entryPrice;
       if (pl >= 0) wins++; else losses++;
-      cash += proceeds; shares = 0;
+      cash += proceeds;
     }
 
     const finalValue = cash;
@@ -212,13 +220,11 @@ Deno.serve(async (req) => {
     const totalTrades = trades.filter(t => t.type === 'sell').length;
     const winRate = totalTrades > 0 ? (wins / totalTrades) * 100 : 0;
 
-    // Buy & hold benchmark
     const firstPrice = closes[0];
     const bhShares = initialBudget / firstPrice;
     const bhFinal = bhShares * finalPrice;
     const bhReturn = ((bhFinal - initialBudget) / initialBudget) * 100;
 
-    // Max drawdown
     let peak = initialBudget, maxDrawdown = 0;
     for (const point of equityCurve) {
       if (point.value > peak) peak = point.value;
@@ -237,7 +243,7 @@ Deno.serve(async (req) => {
         bhReturn: Math.round(bhReturn * 100) / 100,
       },
       equityCurve,
-      trades: trades.slice(-50), // last 50 trades
+      trades: trades.slice(-50),
     });
 
   } catch (error) {
