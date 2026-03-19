@@ -38,6 +38,8 @@ export default function Bots() {
         </div>
       </div>
 
+      {showMonitor && <LiveTradeMonitor onClose={() => setShowMonitor(false)} />}
+
       <Tabs value={filter} onValueChange={setFilter}>
         <TabsList className="bg-secondary">
           <TabsTrigger value="all">All ({bots.length})</TabsTrigger>
