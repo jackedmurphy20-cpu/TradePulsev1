@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, LineChart, Bot, Wallet, History } from 'lucide-react';
+import { LayoutDashboard, LineChart, Bot, Wallet, FlaskConical } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
 const navItems = [
