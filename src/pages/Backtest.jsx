@@ -14,7 +14,8 @@ const defaultForm = {
   startDate: '2023-01-01',
   endDate: '2024-01-01',
   budget: 10000,
-  stopLossPct: '',
+  stopLossType: 'pct',
+  stopLossValue: '',
   takeProfitPct: '',
 };
 
