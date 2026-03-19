@@ -262,6 +262,7 @@ Also keep some cash on the sidelines — having dry powder to buy dips is a mass
     icon: Bot,
     color: 'text-yellow-400',
     bg: 'bg-yellow-400/10',
+    thumbnail: 'https://media.base44.com/images/public/69bc59372fd933208db74d78/c77fef3cf_generated_image.png',
     title: 'Using the Bots',
     subtitle: 'Get the most out of TradePulse',
     lessons: [
