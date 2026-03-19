@@ -8,7 +8,7 @@ const navItems = [
   { path: '/markets', label: 'Markets', icon: LineChart },
   { path: '/bots', label: 'Bots', icon: Bot },
   { path: '/portfolio', label: 'Portfolio', icon: Wallet },
-  { path: '/backtest', label: 'Backtest', icon: FlaskConical },
+  { path: '/learn', label: 'Learn', icon: BookOpen },
 ];
 
 export default function MobileNav() {
