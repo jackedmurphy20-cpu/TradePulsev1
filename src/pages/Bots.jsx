@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { Plus, Bot } from 'lucide-react';
+import { Plus, Bot, Radio } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BotCard from '../components/bots/BotCard';
 import CreateBotDialog from '../components/bots/CreateBotDialog';
+import LiveTradeMonitor from '../components/bots/LiveTradeMonitor';
 
 export default function Bots() {
   const [showCreate, setShowCreate] = useState(false);
