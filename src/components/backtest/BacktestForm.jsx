@@ -110,6 +110,20 @@ export default function BacktestForm({ form, onChange, onRun, loading }) {
         </div>
       </div>
 
+      {(() => {
+        const days = form.startDate && form.endDate
+          ? (new Date(form.endDate) - new Date(form.startDate)) / (1000 * 60 * 60 * 24)
+          : null;
+        if (days !== null && days <= 5 && form.timeframe === '1d') {
+          return (
+            <p className="text-xs text-yellow-400/80 bg-yellow-400/5 border border-yellow-400/20 rounded-lg px-3 py-2">
+              Short date range detected — timeframe will auto-switch to {days <= 1 ? '15m' : '1h'} candles for enough data.
+            </p>
+          );
+        }
+        return null;
+      })()}
+
       <Button onClick={onRun} disabled={loading} className="w-full gap-2">
         {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <PlayCircle className="w-4 h-4" />}
         {loading ? 'Running Backtest...' : 'Run Backtest'}
