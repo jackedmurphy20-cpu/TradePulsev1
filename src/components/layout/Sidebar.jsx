@@ -31,7 +31,7 @@ export default function Sidebar() {
       <aside className="hidden lg:flex fixed top-0 left-0 z-50 h-full w-64 bg-sidebar border-r border-sidebar-border flex-col">
         {/* Logo */}
         <div className="p-6 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3" onClick={() => setIsOpen(false)}>
+          <Link to="/" className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-primary-foreground" />
             </div>
@@ -40,9 +40,6 @@ export default function Sidebar() {
               <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest">Pro</p>
             </div>
           </Link>
-          <Button variant="ghost" size="icon" className="lg:hidden text-muted-foreground" onClick={() => setIsOpen(false)}>
-            <X className="w-5 h-5" />
-          </Button>
         </div>
 
         {/* Navigation */}
