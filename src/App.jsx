@@ -14,6 +14,7 @@ import Portfolio from './pages/Portfolio';
 import Trades from './pages/Trades';
 import Settings from './pages/Settings';
 import Backtest from './pages/Backtest';
+import Learn from './pages/Learn';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
