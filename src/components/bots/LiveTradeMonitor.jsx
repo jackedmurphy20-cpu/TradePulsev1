@@ -15,8 +15,8 @@ export default function LiveTradeMonitor({ onClose }) {
     const unsubTrades = base44.entities.Trade.subscribe((event) => {
       if (event.type === 'create' && event.data) {
         const trade = event.data;
-        setEvents(prev => [{
-          id: event.id + Date.now(),
+        const newEvent = {
+          id: String(event.id) + String(Date.now()),
           kind: 'trade',
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
           side: trade.type,
@@ -26,7 +26,8 @@ export default function LiveTradeMonitor({ onClose }) {
           price: trade.price,
           value: trade.total_value,
           pl: trade.profit_loss,
-        }, ...prev].slice(0, 50);
+        };
+        setEvents(prev => [newEvent].concat(prev).slice(0, 50));
       }
     });
 
