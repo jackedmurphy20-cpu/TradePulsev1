@@ -150,7 +150,10 @@ Deno.serve(async (req) => {
       // Check stop-loss / take-profit on open position
       if (shares > 0 && entryPrice) {
         const pct = (price - entryPrice) / entryPrice;
-        if (stopLoss && pct <= -stopLoss) {
+        const slTriggered = stopLossThreshold && (
+          stopLossMode === 'pct' ? pct <= -stopLossThreshold : (price - entryPrice) * shares <= -stopLossThreshold
+        );
+        if (slTriggered) {
           const proceeds = shares * price;
           const pl = proceeds - shares * entryPrice;
           trades.push({ date: candles[i].t, type: 'sell', price, shares, pl, reason: 'stop_loss' });
