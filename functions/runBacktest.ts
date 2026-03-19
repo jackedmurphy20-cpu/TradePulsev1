@@ -131,7 +131,9 @@ Deno.serve(async (req) => {
 
     const closes = candles.map(c => c.c);
     const initialBudget = budget || 10000;
-    const stopLoss = stopLossPct ? stopLossPct / 100 : null;
+    // stopLoss stored as a fraction for % mode, or raw $ amount for usd mode
+    const stopLossMode = stopLossType || 'pct';
+    const stopLossThreshold = stopLossValue ? (stopLossMode === 'pct' ? stopLossValue / 100 : stopLossValue) : null;
     const takeProfit = takeProfitPct ? takeProfitPct / 100 : null;
 
     let cash = initialBudget;
