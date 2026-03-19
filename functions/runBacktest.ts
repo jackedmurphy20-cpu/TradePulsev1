@@ -38,7 +38,7 @@ function calcBollinger(closes, period = 20) {
 // --- Signal generators per strategy ---
 function getSignal(strategy, closes, i) {
   const window = closes.slice(0, i + 1);
-  if (window.length < 30) return 'hold';
+  if (window.length < 5) return 'hold';
 
   if (strategy === 'momentum') {
     const rsi = calcRSI(window);
