@@ -40,7 +40,8 @@ export default function Backtest() {
         startDate: form.startDate,
         endDate: form.endDate,
         budget: form.budget,
-        stopLossPct: form.stopLossPct || null,
+        stopLossType: form.stopLossType,
+        stopLossValue: form.stopLossValue ? Number(form.stopLossValue) : null,
         takeProfitPct: form.takeProfitPct || null,
       });
       if (res.data.error) {
