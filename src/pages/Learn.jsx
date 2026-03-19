@@ -436,6 +436,29 @@ export default function Learn() {
             <LessonCard key={i} lesson={lesson} />
           ))}
 
+          {/* Chart reference images */}
+          {activeSection === 'indicators' && (
+            <div className="mt-4 space-y-3">
+              <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                <BarChart2 className="w-4 h-4 text-purple-400" /> Chart Reference Gallery
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="rounded-xl overflow-hidden border border-border">
+                  <img src={CHART_IMAGES.candlestickAnatomy} alt="Candlestick Anatomy" className="w-full object-cover" />
+                  <p className="text-xs text-center text-muted-foreground py-2 bg-secondary/40">Candlestick Anatomy</p>
+                </div>
+                <div className="rounded-xl overflow-hidden border border-border">
+                  <img src={CHART_IMAGES.uptrend} alt="Uptrend with Indicators" className="w-full object-cover" />
+                  <p className="text-xs text-center text-muted-foreground py-2 bg-secondary/40">Uptrend + Support/Resistance</p>
+                </div>
+                <div className="rounded-xl overflow-hidden border border-border">
+                  <img src={CHART_IMAGES.patterns} alt="Chart Patterns" className="w-full object-cover" />
+                  <p className="text-xs text-center text-muted-foreground py-2 bg-secondary/40">Common Chart Patterns</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {activeSection === 'risk' && (
             <div className="flex items-start gap-3 bg-destructive/5 border border-destructive/20 rounded-xl p-4 mt-4">
               <AlertTriangle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
