@@ -9,6 +9,19 @@ import { Wallet, Bot, ArrowRightLeft, TrendingUp, Zap, RefreshCw } from 'lucide-
 import { Button } from '@/components/ui/button';
 
 export default function Dashboard() {
+  const [running, setRunning] = useState(false);
+  const queryClient = useQueryClient();
+
+  const handleRunNow = async () => {
+    setRunning(true);
+    try {
+      await base44.functions.invoke('syncMarketData', {});
+      await base44.functions.invoke('runBots', {});
+      queryClient.invalidateQueries();
+    } finally {
+      setRunning(false);
+    }
+  };
   const { data: holdings = [] } = useQuery({
     queryKey: ['holdings'],
     queryFn: () => base44.entities.Holding.list(),
