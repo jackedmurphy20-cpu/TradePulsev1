@@ -408,8 +408,8 @@ export default function Learn() {
                   isActive ? "bg-card border border-border shadow-sm" : "hover:bg-secondary/50"
                 )}
               >
-                <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0", s.bg)}>
-                  <Icon className={cn("w-4 h-4", s.color)} />
+                <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 border border-border">
+                  <img src={s.thumbnail} alt={s.title} className="w-full h-full object-cover" />
                 </div>
                 <div className="min-w-0">
                   <p className={cn("text-sm font-semibold truncate", isActive ? "text-foreground" : "text-muted-foreground")}>{s.title}</p>
