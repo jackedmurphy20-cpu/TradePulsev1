@@ -114,7 +114,7 @@ Deno.serve(async (req) => {
     const user = await base44.auth.me();
     if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { symbol, assetType, strategy, timeframe, startDate, endDate, budget, stopLossPct, takeProfitPct } = await req.json();
+    const { symbol, assetType, strategy, timeframe, startDate, endDate, budget, stopLossType, stopLossValue, takeProfitPct } = await req.json();
 
     if (!symbol || !strategy || !startDate || !endDate) {
       return Response.json({ error: 'Missing required parameters' }, { status: 400 });
