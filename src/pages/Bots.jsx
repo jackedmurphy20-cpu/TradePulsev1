@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Plus, Bot, Radio, Trash2 } from 'lucide-react';
+import { Plus, Bot, Radio, Trash2, LayoutGrid } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BotCard from '../components/bots/BotCard';
 import CreateBotDialog from '../components/bots/CreateBotDialog';
+import SaveTemplateDialog from '../components/bots/SaveTemplateDialog';
+import TemplateGallery from '../components/bots/TemplateGallery';
 import LiveTradeMonitor from '../components/bots/LiveTradeMonitor';
 
 export default function Bots() {
   const [showCreate, setShowCreate] = useState(false);
+  const [prefill, setPrefill] = useState(null);
   const [tab, setTab] = useState('all');
   const [showMonitor, setShowMonitor] = useState(false);
+  const [saveTemplateBot, setSaveTemplateBot] = useState(null);
   const queryClient = useQueryClient();
 
   const { data: bots = [] } = useQuery({
@@ -32,10 +36,17 @@ export default function Bots() {
 
   const handleTabChange = (val) => {
     if (val === 'setup') {
+      setPrefill(null);
       setShowCreate(true);
     } else {
       setTab(val);
     }
+  };
+
+  const handleDeploy = (template) => {
+    setPrefill(template);
+    setShowCreate(true);
+    setTab('all');
   };
 
   return (
@@ -58,6 +69,9 @@ export default function Bots() {
           <TabsTrigger value="active">Active ({bots.filter(b => b.status === 'active').length})</TabsTrigger>
           <TabsTrigger value="paused">Paused ({bots.filter(b => b.status === 'paused').length})</TabsTrigger>
           <TabsTrigger value="stopped">Stopped ({bots.filter(b => b.status === 'stopped').length})</TabsTrigger>
+          <TabsTrigger value="templates" className="text-chart-3">
+            <LayoutGrid className="w-3.5 h-3.5 mr-1" /> Templates
+          </TabsTrigger>
           <TabsTrigger value="setup" className="text-primary">
             <Plus className="w-3.5 h-3.5 mr-1" /> Set Up Bot
           </TabsTrigger>
@@ -67,7 +81,9 @@ export default function Bots() {
         </TabsList>
       </Tabs>
 
-      {tab === 'delete' ? (
+      {tab === 'templates' ? (
+        <TemplateGallery onDeploy={handleDeploy} />
+      ) : tab === 'delete' ? (
         bots.length === 0 ? (
           <div className="bg-card border border-border rounded-xl p-12 text-center">
             <Bot className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
@@ -89,7 +105,7 @@ export default function Bots() {
                 <Button
                   size="sm"
                   variant="destructive"
-                  className="flex-shrink-0 gap-1.5"
+                  className="flex-shrink-0 gap-!5"
                   onClick={() => deleteBot(bot.id)}
                 >
                   <Trash2 className="w-3.5 h-3.5" /> Delete
@@ -105,17 +121,18 @@ export default function Bots() {
           <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
             Create your first trading bot to start automating your trades.
           </p>
-          <Button onClick={() => setShowCreate(true)} className="bg-primary gap-2">
+          <Button onClick={() => { setPrefill(null); setShowCreate(true); }} className="bg-primary gap-2">
             <Plus className="w-4 h-4" /> Create Your First Bot
           </Button>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filtered.map(bot => <BotCard key={bot.id} bot={bot} />)}
+          {filtered.map(bot => <BotCard key={bot.id} bot={bot} onSaveTemplate={setSaveTemplateBot} />)}
         </div>
       )}
 
-      <CreateBotDialog open={showCreate} onOpenChange={setShowCreate} />
+      <CreateBotDialog open={showCreate} onOpenChange={setShowCreate} prefill={prefill} />
+      <SaveTemplateDialog open={!!saveTemplateBot} onOpenChange={setSaveTemplateBot} bot={saveTemplateBot} />
     </div>
   );
 }

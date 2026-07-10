@@ -1,7 +1,7 @@
 import React from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQueryClient } from '@tanstack/react-query';
-import { Play, Pause, Square, MoreVertical, TrendingUp, TrendingDown, Zap } from 'lucide-react';
+import { Play, Pause, Square, MoreVertical, TrendingUp, TrendingDown, Zap, Bookmark } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -15,7 +15,7 @@ const strategyLabels = {
   mean_reversion: 'Mean Reversion',
 };
 
-export default function BotCard({ bot }) {
+export default function BotCard({ bot, onSaveTemplate }) {
   const queryClient = useQueryClient();
   const isProfitable = (bot.total_profit_loss || 0) >= 0;
   const budgetPct = bot.budget > 0 ? ((bot.budget_used || 0) / bot.budget) * 100 : 0;
@@ -77,6 +77,11 @@ export default function BotCard({ bot }) {
               <DropdownMenuItem onClick={() => updateStatus('stopped')}>
                 <Square className="w-4 h-4 mr-2" /> Stop Bot
               </DropdownMenuItem>
+              {onSaveTemplate && (
+                <DropdownMenuItem onClick={() => onSaveTemplate(bot)}>
+                  <Bookmark className="w-4 h-4 mr-2" /> Save as Template
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem className="text-destructive" onClick={deleteBot}>
                 Delete Bot
               </DropdownMenuItem>

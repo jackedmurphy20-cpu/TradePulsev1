@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQueryClient } from '@tanstack/react-query';
 import {
@@ -26,7 +26,7 @@ const frequencies = [
   { value: '1d', label: 'Daily' },
 ];
 
-export default function CreateBotDialog({ open, onOpenChange }) {
+export default function CreateBotDialog({ open, onOpenChange, prefill }) {
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
@@ -39,6 +39,21 @@ export default function CreateBotDialog({ open, onOpenChange }) {
     take_profit_pct: 10,
     frequency: '1h',
   });
+
+  useEffect(() => {
+    if (open && prefill) {
+      setForm({
+        name: '',
+        asset_symbol: prefill.asset_symbol || '',
+        asset_type: prefill.asset_type || 'crypto',
+        strategy: prefill.strategy || 'dca',
+        budget: prefill.budget || 1000,
+        stop_loss_pct: prefill.stop_loss_pct ?? 5,
+        take_profit_pct: prefill.take_profit_pct ?? 10,
+        frequency: prefill.frequency || '1h',
+      });
+    }
+  }, [open, prefill]);
 
   const update = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
 

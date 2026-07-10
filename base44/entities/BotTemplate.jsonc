@@ -1,0 +1,65 @@
+{
+  "name": "BotTemplate",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Template name"
+    },
+    "description": {
+      "type": "string",
+      "description": "What this template is for"
+    },
+    "asset_symbol": {
+      "type": "string",
+      "description": "Default asset symbol"
+    },
+    "asset_type": {
+      "type": "string",
+      "enum": [
+        "stock",
+        "crypto"
+      ],
+      "description": "Asset type"
+    },
+    "strategy": {
+      "type": "string",
+      "enum": [
+        "dca",
+        "grid",
+        "momentum",
+        "mean_reversion"
+      ],
+      "description": "Trading strategy"
+    },
+    "budget": {
+      "type": "number",
+      "description": "Default budget in USD"
+    },
+    "stop_loss_pct": {
+      "type": "number",
+      "description": "Stop loss percentage"
+    },
+    "take_profit_pct": {
+      "type": "number",
+      "description": "Take profit percentage"
+    },
+    "frequency": {
+      "type": "string",
+      "enum": [
+        "1m",
+        "5m",
+        "15m",
+        "1h",
+        "4h",
+        "1d"
+      ],
+      "description": "Trading frequency"
+    }
+  },
+  "required": [
+    "name",
+    "strategy",
+    "budget"
+  ]
+}
