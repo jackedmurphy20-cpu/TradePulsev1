@@ -1,0 +1,60 @@
+{
+  "name": "Trade",
+  "type": "object",
+  "properties": {
+    "bot_id": {
+      "type": "string",
+      "description": "ID of the bot that executed this trade"
+    },
+    "bot_name": {
+      "type": "string",
+      "description": "Name of the bot"
+    },
+    "asset_symbol": {
+      "type": "string",
+      "description": "Asset traded"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "buy",
+        "sell"
+      ],
+      "description": "Trade direction"
+    },
+    "quantity": {
+      "type": "number",
+      "description": "Quantity traded"
+    },
+    "price": {
+      "type": "number",
+      "description": "Price per unit at execution"
+    },
+    "total_value": {
+      "type": "number",
+      "description": "Total trade value in USD"
+    },
+    "profit_loss": {
+      "type": "number",
+      "description": "P&L for this trade (for sell trades)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "executed",
+        "pending",
+        "cancelled",
+        "failed"
+      ],
+      "default": "executed",
+      "description": "Trade status"
+    }
+  },
+  "required": [
+    "asset_symbol",
+    "type",
+    "quantity",
+    "price",
+    "total_value"
+  ]
+}

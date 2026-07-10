@@ -1,0 +1,63 @@
+{
+  "name": "Asset",
+  "type": "object",
+  "properties": {
+    "symbol": {
+      "type": "string",
+      "description": "Ticker symbol (e.g. BTC, AAPL)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Full name of the asset"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "stock",
+        "crypto"
+      ],
+      "description": "Asset type"
+    },
+    "current_price": {
+      "type": "number",
+      "description": "Current price in USD"
+    },
+    "price_change_24h": {
+      "type": "number",
+      "description": "24h price change percentage"
+    },
+    "market_cap": {
+      "type": "number",
+      "description": "Market capitalization"
+    },
+    "volume_24h": {
+      "type": "number",
+      "description": "24h trading volume"
+    },
+    "high_24h": {
+      "type": "number",
+      "description": "24h high price"
+    },
+    "low_24h": {
+      "type": "number",
+      "description": "24h low price"
+    },
+    "sparkline": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "description": "Recent price points for mini chart"
+    },
+    "is_watchlisted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether user is watching this asset"
+    }
+  },
+  "required": [
+    "symbol",
+    "name",
+    "type"
+  ]
+}

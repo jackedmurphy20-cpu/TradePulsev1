@@ -1,0 +1,52 @@
+{
+  "name": "Holding",
+  "type": "object",
+  "properties": {
+    "asset_symbol": {
+      "type": "string",
+      "description": "Asset symbol"
+    },
+    "asset_name": {
+      "type": "string",
+      "description": "Asset full name"
+    },
+    "asset_type": {
+      "type": "string",
+      "enum": [
+        "stock",
+        "crypto"
+      ],
+      "description": "Type of asset"
+    },
+    "quantity": {
+      "type": "number",
+      "description": "Total quantity held"
+    },
+    "avg_buy_price": {
+      "type": "number",
+      "description": "Average purchase price"
+    },
+    "current_price": {
+      "type": "number",
+      "description": "Current market price"
+    },
+    "total_value": {
+      "type": "number",
+      "description": "Current total value"
+    },
+    "profit_loss": {
+      "type": "number",
+      "description": "Unrealized P&L"
+    },
+    "profit_loss_pct": {
+      "type": "number",
+      "description": "Unrealized P&L percentage"
+    }
+  },
+  "required": [
+    "asset_symbol",
+    "asset_name",
+    "quantity",
+    "avg_buy_price"
+  ]
+}
